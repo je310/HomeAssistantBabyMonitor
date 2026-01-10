@@ -1,0 +1,44 @@
+name: Audio Monitor Mix
+slug: audio_monitor_mix
+description: Mix RTSP camera audio streams into a low-latency SRT stream for VLC.
+version: "2.1.0"
+arch:
+  - amd64
+  - aarch64
+  - armv7
+  - armhf
+startup: services
+boot: auto
+init: false
+host_network: false
+
+ports:
+  8099/udp: 8099
+ports_description:
+  8099/udp: SRT audio stream
+
+options:
+  codec: aac
+  bitrate: 128k
+  channels: 1
+  sample_rate: 16000
+  rtsp_transport: udp
+  srt_latency_ms: 50
+  restart_delay_sec: 1
+  ffmpeg_loglevel: warning
+  streams:
+    - rtsp://user:pass@camera-ip
+  volumes:
+    - 1.0
+
+schema:
+  codec: list(aac|mp3)
+  bitrate: str
+  channels: int(1,2)
+  sample_rate: int(8000,48000)
+  rtsp_transport: list(tcp|udp)
+  srt_latency_ms: int(20,2000)
+  restart_delay_sec: int(0,30)
+  ffmpeg_loglevel: list(quiet|panic|fatal|error|warning|info|verbose|debug)
+  streams: [str]
+  volumes: [float]
