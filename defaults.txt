@@ -1,1 +1,2 @@
-rtsp://admin:london123@192.168.0.179
+rtsp://admin:london123@192.168.0.179/h264Preview_01_sub
+rtsp://admin:London123@192.168.0.143/h264Preview_01_sub

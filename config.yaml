@@ -27,9 +27,14 @@ options:
   restart_delay_sec: 1
   ffmpeg_loglevel: warning
   streams:
-    - rtsp://user:pass@camera-ip
+    - rtsp://admin:london123@192.168.0.179/h264Preview_01_sub
+    - rtsp://admin:London123@192.168.0.143/h264Preview_01_sub
   volumes:
     - 1.0
+    - 1.0
+  delays:
+    - 0
+    - 0
 
 schema:
   codec: list(aac|mp3)
@@ -42,3 +47,4 @@ schema:
   ffmpeg_loglevel: list(quiet|panic|fatal|error|warning|info|verbose|debug)
   streams: [str]
   volumes: [float]
+  delays: [int]
