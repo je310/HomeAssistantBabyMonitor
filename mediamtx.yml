@@ -1,0 +1,9 @@
+logLevel: info
+rtspAddress: :28554
+
+# Force TCP interleaved (RTP over the RTSP TCP connection).
+# This avoids needing to expose UDP RTP/RTCP ports from the add-on container.
+protocols: [tcp]
+
+paths:
+  live: {}

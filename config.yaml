@@ -1,7 +1,7 @@
 name: Audio Monitor Mix
 slug: audio_monitor_mix
-description: Mix RTSP camera audio streams into a low-latency SRT stream for VLC.
-version: "2.1.0"
+description: Mix RTSP camera audio streams into low-latency RTSP/HTTP/SRT output
+version: "2.9.0"
 arch:
   - amd64
   - aarch64
@@ -14,29 +14,39 @@ host_network: false
 
 ports:
   8099/udp: 8099
+  8098/tcp: 8098
+  28554/tcp: 28554
 ports_description:
   8099/udp: SRT audio stream
+  8098/tcp: HTTP audio stream
+  28554/tcp: RTSP audio stream
 
 options:
+  output_format: rtsp
   codec: aac
-  bitrate: 128k
+  bitrate: 64k
   channels: 1
   sample_rate: 16000
-  rtsp_transport: udp
+  rtsp_transport: tcp
   srt_latency_ms: 50
   restart_delay_sec: 1
-  ffmpeg_loglevel: warning
+  ffmpeg_loglevel: info
   streams:
     - rtsp://admin:london123@192.168.0.179/h264Preview_01_sub
     - rtsp://admin:London123@192.168.0.143/h264Preview_01_sub
   volumes:
     - 1.0
     - 1.0
-  delays:
-    - 0
-    - 0
+
+  # New low-latency controls
+  ingest_warmup_sec: 2
+  udp_fifo_ms: 250
+  udp_buffer_size: 65536
+  max_delay_us: 150000
+  camera_rtsp_transport: tcp
 
 schema:
+  output_format: list(http|srt|rtsp)
   codec: list(aac|mp3)
   bitrate: str
   channels: int(1,2)
@@ -47,4 +57,10 @@ schema:
   ffmpeg_loglevel: list(quiet|panic|fatal|error|warning|info|verbose|debug)
   streams: [str]
   volumes: [float]
-  delays: [int]
+
+  # New low-latency controls
+  ingest_warmup_sec: int(0,10)
+  udp_fifo_ms: int(50,2000)
+  udp_buffer_size: int(4096,1048576)
+  max_delay_us: int(0,1000000)
+  camera_rtsp_transport: list(tcp|udp)
